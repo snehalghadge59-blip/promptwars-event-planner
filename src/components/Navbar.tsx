@@ -23,30 +23,30 @@ export const Navbar: React.FC<NavbarProps> = ({
   hasApiKey,
 }) => {
   return (
-    <header className="glass-card no-print" style={{ borderRadius: 0, borderTop: 'none', borderLeft: 'none', borderRight: 'none', padding: '0.85rem 1.75rem', position: 'sticky', top: 0, zIndex: 50, backdropFilter: 'blur(20px)' }}>
+    <header className="glass-card no-print" style={{ borderRadius: 0, borderTop: 'none', borderLeft: 'none', borderRight: 'none', borderBottom: '1px solid #e7e5e0', background: 'rgba(255, 255, 255, 0.95)', padding: '0.85rem 1.75rem', position: 'sticky', top: 0, zIndex: 50, backdropFilter: 'blur(16px)', boxShadow: '0 2px 12px rgba(60, 45, 30, 0.04)' }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
         
         {/* Brand & Mission */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-          <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(99, 102, 241, 0.4)' }}>
+          <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'linear-gradient(135deg, #b48c48 0%, #96702e 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(180, 140, 72, 0.3)' }}>
             <Sparkles size={20} color="#ffffff" />
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.2rem', fontWeight: 800, background: 'linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              <span style={{ fontFamily: 'var(--font-serif)', fontSize: '1.35rem', fontWeight: 700, color: '#1c1917', letterSpacing: '-0.01em' }}>
                 AuraPlan AI
               </span>
-              <span className="badge badge-indigo">Challenge 5</span>
+              <span className="badge badge-amber">Challenge 5</span>
             </div>
-            <p style={{ fontSize: '0.72rem', color: 'var(--text-dim)', margin: 0 }}>
+            <p style={{ fontSize: '0.72rem', color: 'var(--text-dim)', margin: 0, fontWeight: 500 }}>
               Autonomous Celebration & Event Architect
             </p>
           </div>
         </div>
 
         {/* 1-Click Presets for Evaluators */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: 'rgba(0, 0, 0, 0.35)', padding: '0.3rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)' }}>
-          <span style={{ fontSize: '0.72rem', color: 'var(--text-dim)', padding: '0 0.5rem', fontWeight: 600 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: '#f5f2eb', padding: '0.3rem', borderRadius: 'var(--radius-sm)', border: '1px solid #e2ddd5' }}>
+          <span style={{ fontSize: '0.72rem', color: '#78716c', padding: '0 0.5rem', fontWeight: 600 }}>
             EVALUATOR PRESETS:
           </span>
           <button

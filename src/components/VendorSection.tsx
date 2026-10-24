@@ -29,24 +29,24 @@ export const VendorSection: React.FC<VendorSectionProps> = ({ tasks }) => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.25rem' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <h2 style={{ fontSize: '1.35rem', color: '#ffffff' }}>Smart Vendor & Procurement Matrix</h2>
-            <span className="badge badge-indigo">
+            <h2 style={{ fontSize: '1.45rem', color: '#1c1917' }}>Smart Vendor & Procurement Matrix</h2>
+            <span className="badge badge-amber">
               <ClipboardList size={13} /> Logistics Agent
             </span>
           </div>
-          <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)' }}>
+          <p style={{ fontSize: '0.825rem', color: '#57534e' }}>
             Contract negotiation checks, lead-time milestones, and SLA guarantees
           </p>
         </div>
 
         {/* Progress Metric */}
         <div style={{ minWidth: '180px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#57534e', marginBottom: '0.35rem' }}>
             <span>Procurement Progress</span>
-            <strong style={{ color: '#10b981' }}>{completionPct}% ({completedCount}/{items.length})</strong>
+            <strong style={{ color: '#047857' }}>{completionPct}% ({completedCount}/{items.length})</strong>
           </div>
           <div className="progress-container">
-            <div className="progress-fill" style={{ width: `${completionPct}%`, background: 'var(--accent-emerald)' }} />
+            <div className="progress-fill" style={{ width: `${completionPct}%`, background: '#059669' }} />
           </div>
         </div>
       </div>
@@ -78,8 +78,8 @@ export const VendorSection: React.FC<VendorSectionProps> = ({ tasks }) => {
               className="glass-card"
               style={{
                 padding: '1rem',
-                background: isDone ? 'rgba(16, 185, 129, 0.04)' : 'rgba(15, 21, 35, 0.6)',
-                borderColor: isDone ? 'rgba(16, 185, 129, 0.2)' : 'var(--border-color)',
+                background: isDone ? '#ecfdf5' : '#ffffff',
+                borderColor: isDone ? '#a7f3d0' : '#e7e5e0',
                 display: 'flex',
                 alignItems: 'flex-start',
                 gap: '1rem',
@@ -91,7 +91,7 @@ export const VendorSection: React.FC<VendorSectionProps> = ({ tasks }) => {
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: isDone ? '#10b981' : 'var(--text-dim)',
+                  color: isDone ? '#059669' : '#a8a29e',
                   cursor: 'pointer',
                   padding: 0,
                   marginTop: '0.15rem',
@@ -104,7 +104,7 @@ export const VendorSection: React.FC<VendorSectionProps> = ({ tasks }) => {
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.35rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <span style={{ fontSize: '0.9rem', fontWeight: 600, color: isDone ? 'var(--text-muted)' : '#ffffff', textDecoration: isDone ? 'line-through' : 'none' }}>
+                    <span style={{ fontSize: '0.9rem', fontWeight: 600, color: isDone ? '#78716c' : '#1c1917', textDecoration: isDone ? 'line-through' : 'none' }}>
                       {t.task}
                     </span>
                     <span className="badge badge-indigo" style={{ fontSize: '0.675rem' }}>
@@ -122,9 +122,9 @@ export const VendorSection: React.FC<VendorSectionProps> = ({ tasks }) => {
                   </div>
                 </div>
 
-                <div style={{ background: 'rgba(0, 0, 0, 0.25)', padding: '0.45rem 0.75rem', borderRadius: 'var(--radius-sm)', borderLeft: '3px solid #6366f1', marginTop: '0.4rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.75rem', color: '#cbd5e1' }}>
-                    <ShieldCheck size={14} color="#818cf8" />
+                <div style={{ background: '#fdfbf7', padding: '0.55rem 0.85rem', borderRadius: 'var(--radius-sm)', borderLeft: '3px solid #b48c48', border: '1px solid #e7e5e0', borderLeftColor: '#b48c48', marginTop: '0.4rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.785rem', color: '#44403c' }}>
+                    <ShieldCheck size={14} color="#b48c48" />
                     <strong>Mandatory Contract Clause:</strong> {t.negotiationCheck}
                   </div>
                 </div>

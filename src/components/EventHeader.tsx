@@ -47,7 +47,7 @@ export const EventHeader: React.FC<EventHeaderProps> = ({ plan }) => {
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'linear-gradient(90deg, rgba(14, 20, 34, 0.96) 0%, rgba(14, 20, 34, 0.72) 55%, rgba(14, 20, 34, 0.94) 100%)',
+              background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.82) 55%, rgba(255, 255, 255, 0.94) 100%)',
               zIndex: 1,
             }}
           />
@@ -68,11 +68,11 @@ export const EventHeader: React.FC<EventHeaderProps> = ({ plan }) => {
         {/* Main Title & Tagline */}
         <div style={{ flex: '1 1 500px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.4rem' }}>
-            <span className="badge badge-indigo">
+            <span className="badge badge-amber">
               <Sparkles size={12} /> {plan.eventType}
             </span>
             {plan.eventDate && (
-              <span className="badge badge-cyan">
+              <span className="badge badge-indigo">
                 Target: {plan.eventDate}
               </span>
             )}
@@ -81,15 +81,15 @@ export const EventHeader: React.FC<EventHeaderProps> = ({ plan }) => {
             </span>
           </div>
 
-          <h1 style={{ fontSize: '2.15rem', lineHeight: 1.2, marginBottom: '0.5rem', color: '#ffffff', textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
+          <h1 style={{ fontSize: '2.4rem', lineHeight: 1.15, marginBottom: '0.5rem', color: '#1c1917', fontFamily: 'var(--font-serif)' }}>
             {eventSummary.title}
           </h1>
 
-          <p style={{ fontSize: '1.05rem', color: '#e2e8f0', fontStyle: 'italic', marginBottom: '0.85rem' }}>
+          <p style={{ fontSize: '1.1rem', color: '#b48c48', fontStyle: 'italic', marginBottom: '0.85rem', fontFamily: 'var(--font-serif)', fontWeight: 600 }}>
             "{eventSummary.tagline}"
           </p>
 
-          <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', lineHeight: 1.6, maxWidth: '850px' }}>
+          <p style={{ fontSize: '0.9rem', color: '#57534e', lineHeight: 1.6, maxWidth: '850px' }}>
             {eventSummary.themeConcept}
           </p>
 
@@ -146,7 +146,7 @@ export const EventHeader: React.FC<EventHeaderProps> = ({ plan }) => {
           )}
 
           {/* Color Palette Card */}
-          <div className="glass-card" style={{ padding: '0.85rem 1rem', background: 'rgba(0, 0, 0, 0.45)' }}>
+          <div className="glass-card" style={{ padding: '0.85rem 1rem', background: '#ffffff', border: '1px solid #e7e5e0' }}>
             <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', marginBottom: '0.5rem', letterSpacing: '0.05em' }}>
               Architectural Palette
             </div>

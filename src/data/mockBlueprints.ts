@@ -10,7 +10,7 @@ export const MOCK_BLUEPRINTS: Record<string, EventPlan> = {
     durationHours: 12,
     locationType: 'Palace Courtyard & Heritage Lawn, Jaipur',
     specialRequirements: 'Royal vintage car entry, pure vegetarian royal thali section, live Sufi band',
-    coverImage: '/images/wedding_bg.jpg',
+    coverImage: '/images/light_event_bg.jpg',
     eventSummary: {
       title: 'The Grand Jaipur Heritage Royal Wedding',
       themeConcept: 'Regal Rajputana grandeur infused with modern twilight illuminations, fragrant marigold cascades, and live classical melodies.',

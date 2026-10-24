@@ -35,9 +35,9 @@ export const AtmosphereGallery: React.FC<AtmosphereGalleryProps> = ({ plan }) =>
     <section className="glass-card" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <Camera size={18} color="#a855f7" />
-          <h2 style={{ fontSize: '1.2rem', color: '#ffffff', margin: 0 }}>Visual Moodboard & Atmosphere Dossier</h2>
-          <span className="badge badge-purple" style={{ fontSize: '0.675rem' }}>Curated Aesthetics</span>
+          <Camera size={18} color="#b48c48" />
+          <h2 style={{ fontSize: '1.35rem', color: '#1c1917', margin: 0 }}>Visual Moodboard & Atmosphere Dossier</h2>
+          <span className="badge badge-amber" style={{ fontSize: '0.675rem' }}>Curated Aesthetics</span>
         </div>
         <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>
           High-Fidelity Architectural & Production Photography

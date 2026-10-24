@@ -32,7 +32,7 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onUpdateCa
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.25rem' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <h2 style={{ fontSize: '1.35rem', color: '#ffffff' }}>Dynamic Budget Optimizer</h2>
+            <h2 style={{ fontSize: '1.45rem', color: '#1c1917' }}>Dynamic Budget Optimizer</h2>
             {coherent ? (
               <span className="badge badge-emerald" title="Category allocations mathematically balance with total budget">
                 <CheckCircle2 size={13} /> Mathematically Coherent
@@ -43,30 +43,30 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onUpdateCa
               </span>
             )}
           </div>
-          <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)' }}>
+          <p style={{ fontSize: '0.825rem', color: '#57534e' }}>
             [Quant Agent]: 5-pillar algorithmic allocation with dedicated 12% dynamic contingency reserve
           </p>
         </div>
 
         {/* Global Summary Metrics */}
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <div style={{ background: 'rgba(0,0,0,0.3)', padding: '0.65rem 1rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)' }}>
-            <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', textTransform: 'uppercase', fontWeight: 600 }}>Total Budget</div>
-            <div style={{ fontSize: '1.15rem', fontWeight: 700, color: '#ffffff' }}>
+          <div style={{ background: '#ffffff', padding: '0.65rem 1rem', borderRadius: 'var(--radius-sm)', border: '1px solid #e2ddd5', boxShadow: '0 2px 6px rgba(0,0,0,0.03)' }}>
+            <div style={{ fontSize: '0.72rem', color: '#78716c', textTransform: 'uppercase', fontWeight: 600 }}>Total Budget</div>
+            <div style={{ fontSize: '1.15rem', fontWeight: 700, color: '#1c1917' }}>
               {formatCurrency(budget.total, budget.currency)}
             </div>
           </div>
 
-          <div style={{ background: 'rgba(16, 185, 129, 0.08)', padding: '0.65rem 1rem', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
-            <div style={{ fontSize: '0.72rem', color: '#34d399', textTransform: 'uppercase', fontWeight: 600 }}>Contingency Fund (12%)</div>
-            <div style={{ fontSize: '1.15rem', fontWeight: 700, color: '#34d399' }}>
+          <div style={{ background: '#ecfdf5', padding: '0.65rem 1rem', borderRadius: 'var(--radius-sm)', border: '1px solid #a7f3d0' }}>
+            <div style={{ fontSize: '0.72rem', color: '#065f46', textTransform: 'uppercase', fontWeight: 600 }}>Contingency Fund (12%)</div>
+            <div style={{ fontSize: '1.15rem', fontWeight: 700, color: '#047857' }}>
               {formatCurrency(budget.contingencyReserve, budget.currency)}
             </div>
           </div>
 
-          <div style={{ background: 'rgba(99, 102, 241, 0.08)', padding: '0.65rem 1rem', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(99, 102, 241, 0.2)' }}>
-            <div style={{ fontSize: '0.72rem', color: '#818cf8', textTransform: 'uppercase', fontWeight: 600 }}>Actual Spent</div>
-            <div style={{ fontSize: '1.15rem', fontWeight: 700, color: totalActual > totalAllocated ? '#f43f5e' : '#818cf8' }}>
+          <div style={{ background: '#fffbeb', padding: '0.65rem 1rem', borderRadius: 'var(--radius-sm)', border: '1px solid #fde68a' }}>
+            <div style={{ fontSize: '0.72rem', color: '#92400e', textTransform: 'uppercase', fontWeight: 600 }}>Actual Spent</div>
+            <div style={{ fontSize: '1.15rem', fontWeight: 700, color: totalActual > totalAllocated ? '#b91c1c' : '#b45309' }}>
               {formatCurrency(totalActual, budget.currency)}
             </div>
           </div>
@@ -86,7 +86,8 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onUpdateCa
               className="glass-card"
               style={{
                 padding: '1.15rem',
-                background: 'rgba(15, 21, 35, 0.65)',
+                background: '#ffffff',
+                border: '1px solid #e7e5e0',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
@@ -94,15 +95,15 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onUpdateCa
             >
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                  <h3 style={{ fontSize: '0.95rem', color: '#ffffff', fontWeight: 600 }}>{cat.category}</h3>
-                  <span className="badge badge-indigo" style={{ fontSize: '0.7rem' }}>
+                  <h3 style={{ fontSize: '0.95rem', color: '#1c1917', fontWeight: 600 }}>{cat.category}</h3>
+                  <span className="badge badge-amber" style={{ fontSize: '0.7rem' }}>
                     {cat.percentage}%
                   </span>
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.825rem', marginBottom: '0.5rem' }}>
-                  <span style={{ color: 'var(--text-muted)' }}>Planned:</span>
-                  <strong style={{ color: '#ffffff' }}>{formatCurrency(cat.allocated, budget.currency)}</strong>
+                  <span style={{ color: '#78716c' }}>Planned:</span>
+                  <strong style={{ color: '#1c1917' }}>{formatCurrency(cat.allocated, budget.currency)}</strong>
                 </div>
 
                 {/* Progress bar */}

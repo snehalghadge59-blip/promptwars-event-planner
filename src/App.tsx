@@ -126,10 +126,10 @@ export const App: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="glass-card no-print" style={{ borderRadius: 0, borderBottom: 'none', borderLeft: 'none', borderRight: 'none', padding: '1.5rem 1.25rem', marginTop: '3rem', textAlign: 'center' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', fontSize: '0.8rem', color: 'var(--text-dim)' }}>
+      <footer className="glass-card no-print" style={{ borderRadius: 0, borderBottom: 'none', borderLeft: 'none', borderRight: 'none', borderTop: '1px solid #e7e5e0', background: 'rgba(255, 255, 255, 0.95)', padding: '1.5rem 1.25rem', marginTop: '3rem', textAlign: 'center' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', fontSize: '0.8rem', color: '#78716c' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Cpu size={15} color="#6366f1" />
+            <Cpu size={15} color="#b48c48" />
             <span>Built for <strong>Hack2Skill PromptWars Virtual</strong> — [Challenge 5] Celebration & Event Planner</span>
           </div>
 
