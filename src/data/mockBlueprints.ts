@@ -10,6 +10,7 @@ export const MOCK_BLUEPRINTS: Record<string, EventPlan> = {
     durationHours: 12,
     locationType: 'Palace Courtyard & Heritage Lawn, Jaipur',
     specialRequirements: 'Royal vintage car entry, pure vegetarian royal thali section, live Sufi band',
+    coverImage: '/images/wedding_bg.jpg',
     eventSummary: {
       title: 'The Grand Jaipur Heritage Royal Wedding',
       themeConcept: 'Regal Rajputana grandeur infused with modern twilight illuminations, fragrant marigold cascades, and live classical melodies.',
@@ -187,6 +188,7 @@ export const MOCK_BLUEPRINTS: Record<string, EventPlan> = {
     durationHours: 36,
     locationType: 'Innovation Hub & Campus Auditorium',
     specialRequirements: 'Dedicated 10 Gbps redundant fiber, mentor booths, midnight energy food stations, hardware lab sandbox',
+    coverImage: '/images/hackathon_bg.jpg',
     eventSummary: {
       title: 'Nexus26: 36-Hour Autonomous Agent Hackathon',
       themeConcept: 'High-octane cyberpunk builder arena where 250 elite engineers build, evaluate, and deploy multi-agent systems overnight.',
@@ -339,6 +341,7 @@ export const MOCK_BLUEPRINTS: Record<string, EventPlan> = {
     durationHours: 6,
     locationType: 'Skyline Penthouse Terrace & Lounge',
     specialRequirements: 'Artisanal cocktail bar, jazz saxophonist, memory photo installation, custom cake reveal',
+    coverImage: '/images/birthday_bg.jpg',
     eventSummary: {
       title: 'Elysium Noir: Snehal’s 30th Rooftop Soirée',
       themeConcept: 'Intimate, moody mid-century speakeasy aesthetic overlooking the illuminated cityscape with vinyl jazz and bespoke cocktail mixology.',

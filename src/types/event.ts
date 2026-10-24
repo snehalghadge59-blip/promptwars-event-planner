@@ -64,6 +64,7 @@ export interface EventPlan {
   durationHours: number;
   locationType: string;
   specialRequirements?: string;
+  coverImage?: string;
   eventSummary: EventSummary;
   budgetAllocation: BudgetAllocation;
   timelineItinerary: TimelineItem[];

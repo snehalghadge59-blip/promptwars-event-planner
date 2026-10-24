@@ -68,7 +68,18 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+      {/* Dynamic Atmospheric Venue Background */}
+      {currentPlan.coverImage && (
+        <div className="app-bg-wrapper no-print">
+          <div
+            className="app-bg-image"
+            style={{ backgroundImage: `url(${currentPlan.coverImage})` }}
+          />
+          <div className="app-bg-overlay" />
+        </div>
+      )}
+
       {/* Navigation */}
       <Navbar
         currentPreset={currentPreset}
