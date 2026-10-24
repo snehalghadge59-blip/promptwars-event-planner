@@ -6,6 +6,7 @@ import { TimelineSection } from './components/TimelineSection';
 import { VendorSection } from './components/VendorSection';
 import { InvitationSection } from './components/InvitationSection';
 import { RiskSentinelSection } from './components/RiskSentinelSection';
+import { AtmosphereGallery } from './components/AtmosphereGallery';
 import { EventInputModal } from './components/EventInputModal';
 import { ApiKeyModal } from './components/ApiKeyModal';
 import { MOCK_BLUEPRINTS } from './data/mockBlueprints';
@@ -97,6 +98,9 @@ export const App: React.FC = () => {
         
         {/* Event Header Banner */}
         <EventHeader plan={currentPlan} />
+
+        {/* Visual Moodboard & Atmosphere Dossier */}
+        <AtmosphereGallery plan={currentPlan} />
 
         {/* Dynamic Budget Optimizer */}
         <BudgetSection budget={currentPlan.budgetAllocation} />
