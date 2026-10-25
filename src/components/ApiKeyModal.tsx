@@ -9,9 +9,9 @@ interface ApiKeyModalProps {
 }
 
 export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, apiKey, onSaveApiKey }) => {
-  if (!isOpen) return null;
-
   const [inputVal, setInputVal] = useState(apiKey);
+
+  if (!isOpen) return null;
 
   const handleSave = () => {
     onSaveApiKey(inputVal.trim());

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Camera, Eye, MapPin, Sparkles } from 'lucide-react';
+import { Camera, Eye } from 'lucide-react';
 import { EventPlan } from '../types/event';
 
 interface AtmosphereGalleryProps {

@@ -14,8 +14,8 @@ describe('Event Orchestrator Edge Cases', () => {
     expect(emptyVariance).toBe(45000);
 
     const fullAllocation = [
-      { name: 'Venue', allocated: 25000, actualSpent: 24000, notes: '', locked: false },
-      { name: 'Catering', allocated: 20000, actualSpent: 19500, notes: '', locked: false },
+      { category: 'Venue', allocated: 25000, percentage: 50, tips: 'Negotiate early', actualSpent: 24000 },
+      { category: 'Catering', allocated: 20000, percentage: 40, tips: 'Fixed rate per plate', actualSpent: 19500 },
     ];
     const zeroVariance = calculateRemainingVariance(50000, fullAllocation, 5000);
     expect(zeroVariance).toBe(0);
@@ -31,7 +31,7 @@ describe('Event Orchestrator Edge Cases', () => {
     expect(isBudgetCoherent(-100, [])).toBe(false);
 
     const categories = [
-      { name: 'Production', allocated: 88000, actualSpent: 80000, notes: '', locked: false },
+      { category: 'Production', allocated: 88000, percentage: 88, tips: 'Package discount', actualSpent: 80000 },
     ];
     // 88000 + 12000 contingency = 100000 total
     expect(isBudgetCoherent(100000, categories, 12000)).toBe(true);

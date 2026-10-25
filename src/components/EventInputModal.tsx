@@ -10,8 +10,6 @@ interface EventInputModalProps {
 }
 
 export const EventInputModal: React.FC<EventInputModalProps> = ({ isOpen, onClose, onSubmit, isLoading }) => {
-  if (!isOpen) return null;
-
   const [eventType, setEventType] = useState('Royal Heritage Wedding');
   const [totalBudget, setTotalBudget] = useState(2500000);
   const [currency, setCurrency] = useState('INR');
@@ -19,6 +17,8 @@ export const EventInputModal: React.FC<EventInputModalProps> = ({ isOpen, onClos
   const [durationHours, setDurationHours] = useState(8);
   const [locationType, setLocationType] = useState('Open-air Courtyard & Palace Lawn');
   const [specialRequirements, setSpecialRequirements] = useState('Live acoustic Sufi music, sunset varmala, strict vegan banquet wing');
+
+  if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
