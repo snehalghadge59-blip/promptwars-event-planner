@@ -76,6 +76,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, apiKe
               type="button"
               onClick={handleClear}
               style={{ background: 'none', border: 'none', color: '#f43f5e', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.785rem' }}
+              aria-label="Clear saved Gemini API key"
             >
               <Trash2 size={12} /> Clear Key
             </button>

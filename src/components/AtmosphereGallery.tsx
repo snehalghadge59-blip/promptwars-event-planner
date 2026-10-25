@@ -45,9 +45,9 @@ export const AtmosphereGallery: React.FC<AtmosphereGalleryProps> = ({ plan }) =>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
-        {galleryItems.map((item, idx) => (
+        {galleryItems.map((item) => (
           <div
-            key={idx}
+            key={item.title}
             className="glass-card"
             style={{
               height: '180px',
@@ -61,6 +61,8 @@ export const AtmosphereGallery: React.FC<AtmosphereGalleryProps> = ({ plan }) =>
               border: '1px solid rgba(255, 255, 255, 0.15)',
               transition: 'transform 0.25s ease, border-color 0.25s ease',
             }}
+            role="img"
+            aria-label={`${item.title}: ${item.subtitle}`}
           >
             {/* Subtle Gradient Shade */}
             <div
@@ -78,7 +80,7 @@ export const AtmosphereGallery: React.FC<AtmosphereGalleryProps> = ({ plan }) =>
                 <span className="badge badge-indigo" style={{ fontSize: '0.675rem', padding: '0.15rem 0.5rem' }}>
                   {item.tag}
                 </span>
-                <span style={{ color: 'rgba(255,255,255,0.7)' }}>
+                <span style={{ color: 'rgba(255,255,255,0.7)' }} aria-hidden="true">
                   <Eye size={14} />
                 </span>
               </div>

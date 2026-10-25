@@ -54,6 +54,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             className={`btn btn-sm ${currentPreset === 'royal-wedding' ? 'btn-primary' : 'btn-secondary'}`}
             onClick={() => onSelectPreset('royal-wedding')}
             title="Load Grand Jaipur Royal Wedding Blueprint"
+            aria-label="Load Royal Wedding event blueprint"
+            aria-pressed={currentPreset === 'royal-wedding'}
           >
             👑 Royal Wedding
           </button>
@@ -62,6 +64,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             className={`btn btn-sm ${currentPreset === 'ai-hackathon' ? 'btn-primary' : 'btn-secondary'}`}
             onClick={() => onSelectPreset('ai-hackathon')}
             title="Load Nexus26 36-Hour Hackathon Blueprint"
+            aria-label="Load AI Hackathon event blueprint"
+            aria-pressed={currentPreset === 'ai-hackathon'}
           >
             ⚡ AI Hackathon
           </button>
@@ -70,6 +74,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             className={`btn btn-sm ${currentPreset === 'milestone-birthday' ? 'btn-primary' : 'btn-secondary'}`}
             onClick={() => onSelectPreset('milestone-birthday')}
             title="Load Elysium Noir Rooftop 30th Birthday Blueprint"
+            aria-label="Load Milestone Birthday event blueprint"
+            aria-pressed={currentPreset === 'milestone-birthday'}
           >
             🍸 30th Birthday
           </button>
@@ -93,6 +99,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="btn btn-secondary btn-sm"
             onClick={onExportICS}
             title="Download Calendar (.ics) file"
+            aria-label="Export and download iCalendar .ics file"
           >
             <Calendar size={14} />
             <span>.ICS</span>
@@ -103,6 +110,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="btn btn-secondary btn-sm"
             onClick={onExportMarkdown}
             title="Copy / Download Markdown Summary"
+            aria-label="Export event plan as Markdown document"
           >
             <FileText size={14} />
             <span>Doc</span>
@@ -113,6 +121,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="btn btn-secondary btn-sm"
             onClick={onExportPDF}
             title="Print or Save PDF"
+            aria-label="Print or save event plan as PDF"
           >
             <Download size={14} />
             <span>PDF</span>

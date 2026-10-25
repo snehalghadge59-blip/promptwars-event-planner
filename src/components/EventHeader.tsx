@@ -151,9 +151,9 @@ export const EventHeader: React.FC<EventHeaderProps> = ({ plan }) => {
               Architectural Palette
             </div>
             <div style={{ display: 'flex', gap: '0.45rem', alignItems: 'center' }}>
-              {eventSummary.colorPalette.map((hex, idx) => (
+              {eventSummary.colorPalette.map((hex) => (
                 <button
-                  key={idx}
+                  key={hex}
                   type="button"
                   onClick={() => handleCopyHex(hex)}
                   style={{
@@ -170,6 +170,7 @@ export const EventHeader: React.FC<EventHeaderProps> = ({ plan }) => {
                     transition: 'transform 0.15s ease',
                   }}
                   title={`Click to copy ${hex}`}
+                  aria-label={`Copy colour ${hex} to clipboard`}
                 >
                   {copiedHex === hex && <Check size={14} color="#ffffff" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.8))' }} />}
                 </button>
