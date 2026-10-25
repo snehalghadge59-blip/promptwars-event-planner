@@ -28,10 +28,11 @@ export const RiskSentinelSection: React.FC<RiskSentinelSectionProps> = ({ risks 
         {risks.map((r, idx) => {
           const impactBadge = r.impact === 'Critical' ? 'badge-rose' : r.impact === 'High' ? 'badge-amber' : 'badge-cyan';
           const probBadge = r.probability === 'High' ? 'badge-rose' : r.probability === 'Med' ? 'badge-amber' : 'badge-emerald';
-
+          // Stable key: use first 30 chars of risk description slug
+          const stableKey = `risk-${r.risk.slice(0, 30).replace(/\s+/g, '-')}-${idx}`;
           return (
             <div
-              key={idx}
+              key={stableKey}
               className="glass-card"
               style={{
                 padding: '1.2rem',
@@ -49,10 +50,18 @@ export const RiskSentinelSection: React.FC<RiskSentinelSectionProps> = ({ risks 
                 </div>
 
                 <div style={{ display: 'flex', gap: '0.4rem' }}>
-                  <span className={`badge ${probBadge}`} style={{ fontSize: '0.7rem' }}>
+                  <span
+                    className={`badge ${probBadge}`}
+                    style={{ fontSize: '0.7rem' }}
+                    aria-label={`Probability level: ${r.probability}`}
+                  >
                     Probability: {r.probability}
                   </span>
-                  <span className={`badge ${impactBadge}`} style={{ fontSize: '0.7rem' }}>
+                  <span
+                    className={`badge ${impactBadge}`}
+                    style={{ fontSize: '0.7rem' }}
+                    aria-label={`Impact level: ${r.impact}`}
+                  >
                     Impact: {r.impact}
                   </span>
                 </div>

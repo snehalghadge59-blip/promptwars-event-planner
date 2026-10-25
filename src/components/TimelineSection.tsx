@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Clock, Calendar, CheckCircle2, Circle, Filter } from 'lucide-react';
 import { TimelineItem } from '../types/event';
 
@@ -11,13 +11,17 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({ timeline, onEx
   const [items, setItems] = useState<TimelineItem[]>(timeline);
   const [activeFilter, setActiveFilter] = useState<string>('All');
 
-  // Extract distinct phases
-  const phases = ['All', ...Array.from(new Set(items.map(i => i.phase)))];
+  // Extract distinct phases — memoized to prevent recalculation on every render
+  const phases = useMemo(
+    () => ['All', ...Array.from(new Set(items.map(i => i.phase)))],
+    [items]
+  );
 
   const handleToggleComplete = (idx: number) => {
-    const updated = [...items];
-    updated[idx].completed = !updated[idx].completed;
-    setItems(updated);
+    // Immutable update — avoids direct property mutation on shared state
+    setItems(prev => prev.map((item, i) =>
+      i === idx ? { ...item, completed: !item.completed } : item
+    ));
   };
 
   const filteredItems = activeFilter === 'All'
@@ -56,13 +60,15 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({ timeline, onEx
         <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.75rem', color: '#78716c', marginRight: '0.25rem' }}>
           <Filter size={13} /> Filter:
         </span>
-        {phases.map((phase, idx) => (
+        {phases.map((phase) => (
           <button
-            key={idx}
+            key={phase}
             type="button"
             className={`btn btn-sm ${activeFilter === phase ? 'btn-primary' : 'btn-secondary'}`}
             style={{ fontSize: '0.75rem', padding: '0.25rem 0.65rem' }}
             onClick={() => setActiveFilter(phase)}
+            aria-pressed={activeFilter === phase}
+            aria-label={`Filter by phase: ${phase}`}
           >
             {phase}
           </button>
@@ -73,9 +79,11 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({ timeline, onEx
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
         {filteredItems.map((item, idx) => {
           const isDone = item.completed;
+          // Use stable id if available, otherwise construct one from time+phase
+          const stableKey = item.id ?? `${item.time}-${item.phase}-${idx}`;
           return (
             <div
-              key={idx}
+              key={stableKey}
               className="glass-card"
               style={{
                 padding: '1rem 1.25rem',
@@ -100,6 +108,9 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({ timeline, onEx
                   marginTop: '0.2rem',
                 }}
                 title={isDone ? 'Mark Pending' : 'Mark Completed'}
+                aria-label={isDone ? `Mark "${item.activity}" as pending` : `Mark "${item.activity}" as completed`}
+                aria-checked={isDone}
+                role="checkbox"
               >
                 {isDone ? <CheckCircle2 size={20} /> : <Circle size={20} />}
               </button>

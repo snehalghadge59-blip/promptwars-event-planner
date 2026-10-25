@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { ClipboardList, CheckSquare, Square, ShieldCheck } from 'lucide-react';
 import { VendorTask } from '../types/event';
 
@@ -10,18 +10,25 @@ export const VendorSection: React.FC<VendorSectionProps> = ({ tasks }) => {
   const [items, setItems] = useState<VendorTask[]>(tasks);
   const [filterCategory, setFilterCategory] = useState<string>('All');
 
-  const categories = ['All', ...Array.from(new Set(items.map(t => t.category)))];
+  const categories = useMemo(
+    () => ['All', ...Array.from(new Set(items.map(t => t.category)))],
+    [items]
+  );
 
   const handleToggle = (id: string) => {
     setItems(items.map(t => (t.id === id ? { ...t, completed: !t.completed } : t)));
   };
 
-  const completedCount = items.filter(t => t.completed).length;
-  const completionPct = items.length > 0 ? Math.round((completedCount / items.length) * 100) : 0;
+  const completedCount = useMemo(() => items.filter(t => t.completed).length, [items]);
+  const completionPct = useMemo(
+    () => (items.length > 0 ? Math.round((completedCount / items.length) * 100) : 0),
+    [completedCount, items.length]
+  );
 
-  const filteredTasks = filterCategory === 'All'
-    ? items
-    : items.filter(t => t.category === filterCategory);
+  const filteredTasks = useMemo(
+    () => (filterCategory === 'All' ? items : items.filter(t => t.category === filterCategory)),
+    [filterCategory, items]
+  );
 
   return (
     <section className="glass-card" style={{ padding: '1.75rem', marginBottom: '1.5rem' }}>
@@ -53,13 +60,15 @@ export const VendorSection: React.FC<VendorSectionProps> = ({ tasks }) => {
 
       {/* Filter Tabs */}
       <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
-        {categories.map((cat, idx) => (
+        {categories.map((cat) => (
           <button
-            key={idx}
+            key={cat}
             type="button"
             className={`btn btn-sm ${filterCategory === cat ? 'btn-primary' : 'btn-secondary'}`}
             style={{ fontSize: '0.75rem', padding: '0.25rem 0.65rem' }}
             onClick={() => setFilterCategory(cat)}
+            aria-pressed={filterCategory === cat}
+            aria-label={`Filter vendors by category: ${cat}`}
           >
             {cat}
           </button>
@@ -97,6 +106,9 @@ export const VendorSection: React.FC<VendorSectionProps> = ({ tasks }) => {
                   marginTop: '0.15rem',
                 }}
                 title={isDone ? 'Mark Incomplete' : 'Mark Complete'}
+                aria-label={isDone ? `Mark "${t.task}" as incomplete` : `Mark "${t.task}" as complete`}
+                aria-checked={isDone}
+                role="checkbox"
               >
                 {isDone ? <CheckSquare size={20} /> : <Square size={20} />}
               </button>
