@@ -10,7 +10,7 @@ export const MOCK_BLUEPRINTS: Record<string, EventPlan> = {
     durationHours: 12,
     locationType: 'Palace Courtyard & Heritage Lawn, Jaipur',
     specialRequirements: 'Royal vintage car entry, pure vegetarian royal thali section, live Sufi band',
-    coverImage: '/images/light_event_bg.jpg',
+    coverImage: '/images/light_event_bg.webp',
     eventSummary: {
       title: 'The Grand Jaipur Heritage Royal Wedding',
       themeConcept: 'Regal Rajputana grandeur infused with modern twilight illuminations, fragrant marigold cascades, and live classical melodies.',
@@ -188,7 +188,7 @@ export const MOCK_BLUEPRINTS: Record<string, EventPlan> = {
     durationHours: 36,
     locationType: 'Innovation Hub & Campus Auditorium',
     specialRequirements: 'Dedicated 10 Gbps redundant fiber, mentor booths, midnight energy food stations, hardware lab sandbox',
-    coverImage: '/images/hackathon_bg.jpg',
+    coverImage: '/images/hackathon_bg.webp',
     eventSummary: {
       title: 'Nexus26: 36-Hour Autonomous Agent Hackathon',
       themeConcept: 'High-octane cyberpunk builder arena where 250 elite engineers build, evaluate, and deploy multi-agent systems overnight.',
@@ -341,7 +341,7 @@ export const MOCK_BLUEPRINTS: Record<string, EventPlan> = {
     durationHours: 6,
     locationType: 'Skyline Penthouse Terrace & Lounge',
     specialRequirements: 'Artisanal cocktail bar, jazz saxophonist, memory photo installation, custom cake reveal',
-    coverImage: '/images/birthday_bg.jpg',
+    coverImage: '/images/birthday_bg.webp',
     eventSummary: {
       title: 'Elysium Noir: Snehal’s 30th Rooftop Soirée',
       themeConcept: 'Intimate, moody mid-century speakeasy aesthetic overlooking the illuminated cityscape with vinyl jazz and bespoke cocktail mixology.',
@@ -457,6 +457,20 @@ export const MOCK_BLUEPRINTS: Record<string, EventPlan> = {
         impact: 'Med',
         contingencyPlan: 'Weighted crystal centerpieces and acrylic windbreak shield panels mobilized on terrace rim.',
         triggerCondition: 'Wind speed exceeds 25 km/h on rooftop anemometer.',
+      },
+      {
+        risk: 'Elevator bottleneck during peak arrival hour at penthouse tower',
+        probability: 'Med',
+        impact: 'Med',
+        contingencyPlan: 'Reserve dedicated service elevator with VIP usher and welcome mocktail cart in lobby.',
+        triggerCondition: 'Lobby wait time exceeds 6 minutes on building intercom.',
+      },
+      {
+        risk: 'Signature artisanal spirits consumption spike during late night sets',
+        probability: 'Low',
+        impact: 'High',
+        contingencyPlan: 'Pre-stocked sealed reserve case of top-shelf gin & single malt with on-demand inventory rider.',
+        triggerCondition: 'Bar inventory hits 20% remaining threshold before 10 PM.',
       },
     ],
   },

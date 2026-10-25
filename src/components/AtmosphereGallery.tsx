@@ -14,19 +14,19 @@ export const AtmosphereGallery: React.FC<AtmosphereGalleryProps> = ({ plan }) =>
     {
       title: 'Architectural Venue',
       subtitle: plan.locationType,
-      image: plan.coverImage || '/images/wedding_bg.jpg',
+      image: plan.coverImage || '/images/wedding_bg.webp',
       tag: 'Setting & Aura',
     },
     {
       title: 'Sober Ambient Decor & Lighting',
       subtitle: isWedding ? 'Warm Candelabras & Ivory Florals' : isHackathon ? 'Electric Neon Mezzanine' : 'Intimate Penthouse Lounge',
-      image: isWedding ? '/images/sober_decor.jpg' : isHackathon ? '/images/hackathon_bg.jpg' : '/images/birthday_bg.jpg',
+      image: isWedding ? '/images/sober_decor.webp' : isHackathon ? '/images/hackathon_bg.webp' : '/images/birthday_bg.webp',
       tag: 'Atmosphere Design',
     },
     {
       title: 'Fine Dining & Banquet Experience',
       subtitle: isWedding ? 'Royal Thali & Dessert Pavilion' : isHackathon ? 'High-Protein Graveyard Fuel' : 'Artisanal Smoked Cocktails',
-      image: isWedding ? '/images/wedding_bg.jpg' : isHackathon ? '/images/hackathon_bg.jpg' : '/images/birthday_bg.jpg',
+      image: isWedding ? '/images/wedding_bg.webp' : isHackathon ? '/images/hackathon_bg.webp' : '/images/birthday_bg.webp',
       tag: 'Culinary Art',
     },
   ];

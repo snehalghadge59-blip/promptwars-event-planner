@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Media & Videos (Ensure repo stays strictly under 10MB)
+*.mp4
+*.mkv
+generate_reel.py
+demo_video.webp
+scratch_credits_guide.txt
