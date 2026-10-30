@@ -1,12 +1,52 @@
+/**
+ * @fileoverview RiskSentinelSection — FMEA Risk & Contingency Matrix panel.
+ *
+ * Renders the Sentinel Agent output: a list of identified risks, each with
+ * probability/impact classification badges, trigger conditions, and
+ * autonomous Plan B contingency protocols. Provides a meaningful empty state
+ * when no risks are present.
+ */
+
 import React from 'react';
 import { ShieldAlert, AlertTriangle } from 'lucide-react';
 import { RiskContingency } from '../types/event';
 
+/**
+ * Props for the {@link RiskSentinelSection} component.
+ */
 interface RiskSentinelSectionProps {
+  /** Array of risk and contingency items produced by the Sentinel Agent. */
   risks: RiskContingency[];
 }
 
+/**
+ * Renders the Operational Risk & Contingency Sentinel section.
+ *
+ * Displays a Failure Mode & Effects Analysis (FMEA) matrix with each risk
+ * showing probability, impact level, trigger condition, and autonomous
+ * Plan B contingency action. Renders an "All Clear" empty state when the
+ * risks array is empty.
+ *
+ * @param risks - Array of FMEA risk objects from the active event plan.
+ */
 export const RiskSentinelSection: React.FC<RiskSentinelSectionProps> = ({ risks }) => {
+  // Guard: render a meaningful empty state instead of a blank section
+  if (!risks || risks.length === 0) {
+    return (
+      <section
+        className="glass-card"
+        style={{ padding: '1.75rem', marginBottom: '1.5rem', textAlign: 'center' }}
+        aria-label="Risk and Contingency Sentinel: no risks identified"
+      >
+        <ShieldAlert size={28} color="#10b981" style={{ margin: '0 auto 0.5rem' }} />
+        <p style={{ color: '#047857', fontWeight: 600 }}>All Clear — No Critical Risks Identified</p>
+        <p style={{ fontSize: '0.825rem', color: '#78716c', marginTop: '0.25rem' }}>
+          The FMEA Sentinel found no risk factors requiring contingency protocols for this event.
+        </p>
+      </section>
+    );
+  }
+
   return (
     <section className="glass-card" style={{ padding: '1.75rem', marginBottom: '1.5rem' }}>
       {/* Header */}

@@ -1,3 +1,11 @@
+/**
+ * @fileoverview BudgetSection — Dynamic Budget Optimizer panel for AuraPlan AI.
+ *
+ * Renders the 5-pillar budget breakdown with live-editable "Actual Spent"
+ * fields, an animated spend-progress bar per category, and a mathematical
+ * coherence badge powered by {@link isBudgetCoherent}.
+ */
+
 import React, { useState } from 'react';
 import { CheckCircle2, AlertTriangle } from 'lucide-react';
 import { BudgetAllocation, BudgetCategory } from '../types/event';
@@ -8,11 +16,30 @@ import {
   isBudgetCoherent,
 } from '../utils/budgetCalculator';
 
+/**
+ * Props for the {@link BudgetSection} component.
+ */
 interface BudgetSectionProps {
+  /** The full budget allocation object containing total, contingency, and categories. */
   budget: BudgetAllocation;
+  /**
+   * Optional callback invoked when the user edits an "Actual Spent" field.
+   * Receives the category name and the new numeric amount.
+   */
   onUpdateCategorySpent?: (categoryName: string, newSpent: number) => void;
 }
 
+/**
+ * Renders the Dynamic Budget Optimizer section of an event plan.
+ *
+ * Displays the 5-pillar budget allocation as interactive cards with:
+ * - Planned vs actual spend visualisation via progress bars.
+ * - Live-editable actual spend inputs per category.
+ * - A "Mathematically Coherent" badge when category sums balance.
+ *
+ * @param budget               - Budget allocation data from the active event plan.
+ * @param onUpdateCategorySpent - Optional callback for external state sync on spend edits.
+ */
 export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onUpdateCategorySpent }) => {
   const [categories, setCategories] = useState<BudgetCategory[]>(budget.categories);
   const totalAllocated = calculateTotalAllocated(categories);
@@ -25,6 +52,15 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onUpdateCa
     setCategories(updated);
     if (onUpdateCategorySpent) onUpdateCategorySpent(categoryName, num);
   };
+
+  // Guard: empty categories array
+  if (categories.length === 0) {
+    return (
+      <section className="glass-card" style={{ padding: '1.75rem', marginBottom: '1.5rem', textAlign: 'center', color: '#78716c' }}>
+        <p>No budget categories defined for this event plan.</p>
+      </section>
+    );
+  }
 
   return (
     <section className="glass-card" style={{ padding: '1.75rem', marginBottom: '1.5rem' }}>
@@ -82,7 +118,7 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onUpdateCa
 
           return (
             <div
-              key={idx}
+              key={cat.category}
               className="glass-card"
               style={{
                 padding: '1.15rem',
@@ -128,12 +164,15 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onUpdateCa
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
                   <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>{budget.currency}</span>
                   <input
+                    id={`actual-spent-${cat.category.replace(/\s+/g, '-').toLowerCase()}`}
                     type="number"
                     className="form-input"
                     style={{ width: '110px', padding: '0.25rem 0.5rem', fontSize: '0.785rem', textAlign: 'right' }}
                     value={cat.actualSpent ?? ''}
                     onChange={(e) => handleSpentChange(cat.category, e.target.value)}
                     placeholder="0"
+                    min={0}
+                    aria-label={`Actual amount spent on ${cat.category} in ${budget.currency}`}
                   />
                 </div>
               </div>

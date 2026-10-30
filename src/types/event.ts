@@ -75,6 +75,7 @@ export interface EventPlan {
 
 export interface EventInput {
   eventType: string;
+  eventDate: string;
   totalBudget: number;
   currency: string;
   guestCount: number;

@@ -1,3 +1,11 @@
+/**
+ * @fileoverview ApiKeyModal — Gemini API key configuration dialog.
+ *
+ * Provides a secure, accessible modal dialog for entering and persisting a
+ * Google Gemini API key to `sessionStorage`. The key never leaves the browser
+ * and is only transmitted to official Google AI Studio endpoints.
+ */
+
 import React, { useState } from 'react';
 import { X, Key, ExternalLink, ShieldCheck, Trash2 } from 'lucide-react';
 

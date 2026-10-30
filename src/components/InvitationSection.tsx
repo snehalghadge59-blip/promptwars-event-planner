@@ -1,13 +1,35 @@
+/**
+ * @fileoverview InvitationSection — AI Theme & Invitation Studio panel.
+ *
+ * Renders dual-channel AI-generated invitation copy: a formal digital invite
+ * and a punchy WhatsApp/social broadcast message. Each card supports
+ * one-click clipboard copy with a celebratory confetti burst as micro-feedback.
+ */
+
 import React, { useState } from 'react';
 import { Mail, MessageCircle, Copy, Check, PartyPopper } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { InvitationStudio } from '../types/event';
 
+/**
+ * Props for the {@link InvitationSection} component.
+ */
 interface InvitationSectionProps {
+  /** AI-generated invitation copy in formal and casual formats. */
   studio: InvitationStudio;
+  /** Display title of the event, used in the section description. */
   eventTitle: string;
 }
 
+/**
+ * Renders the AI Theme & Invitation Studio section.
+ *
+ * Displays two invitation cards — formal and WhatsApp/social — each with
+ * a one-click clipboard copy button and confetti micro-animation feedback.
+ *
+ * @param studio     - AI-generated invitation copy object.
+ * @param eventTitle - Event title shown in the section subheading.
+ */
 export const InvitationSection: React.FC<InvitationSectionProps> = ({ studio, eventTitle }) => {
   const [copiedType, setCopiedType] = useState<string | null>(null);
 

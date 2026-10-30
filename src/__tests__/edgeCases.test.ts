@@ -29,6 +29,8 @@ describe('Event Orchestrator Edge Cases', () => {
   it('should validate budget coherence bounds accurately', () => {
     expect(isBudgetCoherent(0, [])).toBe(false);
     expect(isBudgetCoherent(-100, [])).toBe(false);
+    // Negative contingency reserve is invalid — a reserve cannot be negative
+    expect(isBudgetCoherent(100000, [], -1)).toBe(false);
 
     const categories = [
       { category: 'Production', allocated: 88000, percentage: 88, tips: 'Package discount', actualSpent: 80000 },

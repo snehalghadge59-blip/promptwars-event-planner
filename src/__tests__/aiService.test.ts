@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { SYSTEM_PROMPT } from '../services/aiService';
+import { SYSTEM_PROMPT, cleanJsonString } from '../services/aiService';
 import { MOCK_BLUEPRINTS } from '../data/mockBlueprints';
 
 describe('AI Service & Prompt Schema Validation', () => {
@@ -67,15 +67,11 @@ describe('AI Service & Prompt Schema Validation', () => {
     });
   });
 
-  it('should verify clean JSON extraction strips code fence wrappers correctly', () => {
-    const clean = (str: string) => {
-      let s = str.trim();
-      if (s.startsWith('```json')) s = s.replace(/^```json\s*/, '').replace(/\s*```$/, '');
-      else if (s.startsWith('```')) s = s.replace(/^```\s*/, '').replace(/\s*```$/, '');
-      return s;
-    };
-    expect(JSON.parse(clean('```json\n{"key": "value"}\n```'))).toEqual({ key: 'value' });
-    expect(JSON.parse(clean('```\n{"key": "value"}\n```'))).toEqual({ key: 'value' });
-    expect(JSON.parse(clean('{"key": "value"}'))).toEqual({ key: 'value' });
+  it('should clean JSON extraction strips code fence wrappers correctly via exported utility', () => {
+    expect(JSON.parse(cleanJsonString('```json\n{"key": "value"}\n```'))).toEqual({ key: 'value' });
+    expect(JSON.parse(cleanJsonString('```\n{"key": "value"}\n```'))).toEqual({ key: 'value' });
+    expect(JSON.parse(cleanJsonString('{"key": "value"}'))).toEqual({ key: 'value' });
+    // Edge case: whitespace-only wrapper
+    expect(JSON.parse(cleanJsonString('```json   \n{"a":1}\n   ```'))).toEqual({ a: 1 });
   });
 });

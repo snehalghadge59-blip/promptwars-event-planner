@@ -1,11 +1,30 @@
+/**
+ * @fileoverview EventHeader — Hero banner for the active event plan.
+ *
+ * Renders the event title, tagline, theme concept, quick-reference meta pills,
+ * an interactive colour palette swatch with clipboard copy, and an optional
+ * venue atmosphere thumbnail when a cover image is available.
+ */
+
 import React, { useState } from 'react';
 import { Users, Clock, MapPin, Sparkles, Shirt, Check } from 'lucide-react';
 import { EventPlan } from '../types/event';
 
+/**
+ * Props for the {@link EventHeader} component.
+ */
 interface EventHeaderProps {
+  /** The fully-populated event plan whose summary is displayed in the banner. */
   plan: EventPlan;
 }
 
+/**
+ * Hero banner component displaying the event identity: title, tagline,
+ * theme concept, key metrics (guest count, duration, venue, dress code),
+ * colour palette swatches with clipboard copy, and venue atmosphere thumbnail.
+ *
+ * @param plan - The active event plan to render.
+ */
 export const EventHeader: React.FC<EventHeaderProps> = ({ plan }) => {
   const { eventSummary, guestCount, durationHours, locationType } = plan;
   const [copiedHex, setCopiedHex] = useState<string | null>(null);

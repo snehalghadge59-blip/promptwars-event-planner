@@ -1,17 +1,43 @@
+/**
+ * @fileoverview Navbar — Sticky application header for AuraPlan AI.
+ *
+ * Renders the brand identity, one-click evaluator preset switcher, and the
+ * action suite (API key, export buttons, new plan). Implemented as a
+ * `<header>` landmark with `position: sticky` for persistent navigation.
+ */
+
 import React from 'react';
 import { Sparkles, Key, PlusCircle, Download, FileText, Calendar, CheckCircle2 } from 'lucide-react';
 
+/**
+ * Props for the {@link Navbar} component.
+ */
 interface NavbarProps {
+  /** Key of the currently active evaluator preset (e.g. `'royal-wedding'`). */
   currentPreset: string;
+  /** Callback to switch the active event blueprint preset. */
   onSelectPreset: (key: string) => void;
+  /** Opens the custom event synthesis modal. */
   onOpenCustomModal: () => void;
+  /** Opens the Gemini API key configuration modal. */
   onOpenApiKeyModal: () => void;
+  /** Triggers a browser print dialog for PDF export. */
   onExportPDF: () => void;
+  /** Downloads an RFC 5545 iCalendar file of the active event timeline. */
   onExportICS: () => void;
+  /** Downloads a Markdown executive dossier of the active event plan. */
   onExportMarkdown: () => void;
+  /** Whether a valid Gemini API key is currently configured in the session. */
   hasApiKey: boolean;
 }
 
+/**
+ * Sticky application header providing brand identity, evaluator preset
+ * switching, and export/action controls for AuraPlan AI.
+ *
+ * Renders as an HTML `<header>` landmark element with `aria-pressed` state
+ * on each preset button for screen reader compatibility.
+ */
 export const Navbar: React.FC<NavbarProps> = ({
   currentPreset,
   onSelectPreset,

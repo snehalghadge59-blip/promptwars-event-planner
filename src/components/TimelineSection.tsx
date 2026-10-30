@@ -1,12 +1,37 @@
+/**
+ * @fileoverview TimelineSection — Run-of-Show Master Itinerary panel.
+ *
+ * Renders the ChronoPlanner output: an interactive, filterable timeline of
+ * event activities with phase filters, completion toggle checkboxes, and
+ * buffer time indicators. Includes a one-click RFC 5545 iCalendar export.
+ */
+
 import React, { useState, useMemo } from 'react';
 import { Clock, Calendar, CheckCircle2, Circle, Filter } from 'lucide-react';
 import { TimelineItem } from '../types/event';
 
+/**
+ * Props for the {@link TimelineSection} component.
+ */
 interface TimelineSectionProps {
+  /** Ordered array of timeline items from the ChronoPlanner agent output. */
   timeline: TimelineItem[];
+  /** Callback to trigger an RFC 5545 iCalendar file download. */
   onExportICS: () => void;
 }
 
+/**
+ * Renders the Run-of-Show Master Itinerary section.
+ *
+ * Features include:
+ * - Phase-based filter tabs (All, Arrival, Core Ceremony, etc.).
+ * - Per-item completion toggle with visual strikethrough on done items.
+ * - Buffer time badges highlighting operational transition windows.
+ * - One-click `.ics` calendar export via the ChronoPlanner export hook.
+ *
+ * @param timeline    - Ordered list of timeline activities.
+ * @param onExportICS - Callback that initiates the iCalendar file download.
+ */
 export const TimelineSection: React.FC<TimelineSectionProps> = ({ timeline, onExportICS }) => {
   const [items, setItems] = useState<TimelineItem[]>(timeline);
   const [activeFilter, setActiveFilter] = useState<string>('All');

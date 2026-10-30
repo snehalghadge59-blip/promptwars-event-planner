@@ -1,11 +1,35 @@
+/**
+ * @fileoverview VendorSection — Smart Vendor & Procurement Matrix panel.
+ *
+ * Renders the Logistics Agent output: an interactive, filterable vendor
+ * checklist with category filters, completion progress tracking, priority
+ * badges, and mandatory contract clause callouts per vendor task.
+ */
+
 import React, { useState, useMemo } from 'react';
 import { ClipboardList, CheckSquare, Square, ShieldCheck } from 'lucide-react';
 import { VendorTask } from '../types/event';
 
+/**
+ * Props for the {@link VendorSection} component.
+ */
 interface VendorSectionProps {
+  /** Array of vendor procurement tasks from the Logistics Agent output. */
   tasks: VendorTask[];
 }
 
+/**
+ * Renders the Smart Vendor & Procurement Matrix section.
+ *
+ * Features include:
+ * - Category filter tabs for quick task navigation.
+ * - Completion progress bar and percentage counter.
+ * - Priority badges (High / Medium / Low) with colour coding.
+ * - Contract clause callout per vendor for negotiation guidance.
+ * - Per-task completion toggle with immutable state update.
+ *
+ * @param tasks - Array of vendor procurement tasks from the active event plan.
+ */
 export const VendorSection: React.FC<VendorSectionProps> = ({ tasks }) => {
   const [items, setItems] = useState<VendorTask[]>(tasks);
   const [filterCategory, setFilterCategory] = useState<string>('All');

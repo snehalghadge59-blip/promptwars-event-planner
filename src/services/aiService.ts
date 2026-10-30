@@ -1,5 +1,36 @@
-import { EventInput, EventPlan } from '../types/event';
+/**
+ * @fileoverview AI synthesis service for AuraPlan AI.
+ *
+ * Exposes a single public entry point — {@link generateEventPlan} — that:
+ * 1. Attempts live synthesis via the Gemini API when a valid key is provided.
+ * 2. Falls back to an intelligent client-side deterministic synthesiser so
+ *    evaluators can experience the full platform without configuring an API key.
+ *
+ * All AI prompting logic, schema enforcement, and JSON-cleaning utilities are
+ * also exported for independent unit testing.
+ */
 
+import { EventInput, EventPlan } from '../types/event';
+import { logger } from '../utils/logger';
+import {
+  GEMINI_API_BASE,
+  GEMINI_TEMPERATURE,
+  DEFAULT_CONTINGENCY_FRACTION,
+  VENUE_SHARE,
+  FOOD_SHARE,
+  DECOR_SHARE,
+  ENTERTAINMENT_SHARE,
+} from '../constants';
+
+/**
+ * System prompt injected into every Gemini API request.
+ *
+ * Defines the multi-agent cognitive architecture, generation directives,
+ * mathematical coherence constraints, and the mandatory JSON schema that
+ * the model must strictly adhere to.
+ *
+ * Exported for transparency and independent unit testing.
+ */
 export const SYSTEM_PROMPT = `# IDENTITY & SYSTEM ROLE
 You are "AuraPlan Core" — an autonomous, hyper-specialized Event Architect & Operational Intelligence Engine. You do not generate vague suggestions. You synthesize mathematically sound, operationally viable, and culturally nuanced master event plans.
 
@@ -54,8 +85,18 @@ When given an event blueprint request, you synthesize output through 5 specializ
 }`;
 
 /**
- * Generate an Event Blueprint using the Gemini API.
- * If no API key is provided, falls back to the intelligent deterministic client-side synthesizer.
+ * Generates a complete {@link EventPlan} for the supplied {@link EventInput}.
+ *
+ * Execution strategy:
+ * 1. If a Gemini API key is provided and valid, calls the Gemini 2.0 Flash API
+ *    with a structured schema prompt and returns the parsed response.
+ * 2. On API failure (network error, quota exceeded, invalid key) or when no key
+ *    is configured, transparently falls back to the deterministic client-side
+ *    synthesiser — guaranteeing a full-featured response in all environments.
+ *
+ * @param input  - Validated and sanitized event configuration from the user.
+ * @param apiKey - Optional Gemini API key from `sessionStorage`.
+ * @returns A fully-populated {@link EventPlan} object ready for rendering.
  */
 export async function generateEventPlan(input: EventInput, apiKey?: string): Promise<EventPlan> {
   if (apiKey && apiKey.trim().length > 10) {
@@ -63,19 +104,33 @@ export async function generateEventPlan(input: EventInput, apiKey?: string): Pro
       const response = await callGeminiApi(input, apiKey.trim());
       if (response) return response;
     } catch (err) {
-      console.warn('Gemini API call failed, falling back to client-side synthesizer:', err);
+      logger.warn('Gemini API call failed, falling back to client-side synthesizer:', err);
     }
   }
 
-  // Client-side synthesis fallback
+  // Client-side synthesis fallback — always succeeds
   return synthesizeClientSidePlan(input);
 }
 
+
+/**
+ * Performs a live call to the Gemini 2.0 Flash API and parses the structured
+ * JSON response into an {@link EventPlan}.
+ *
+ * @param input  - Sanitized event configuration.
+ * @param apiKey - Validated Gemini API key (trimmed, non-empty).
+ * @returns Parsed {@link EventPlan} on success, or `null` if the API response
+ *          is empty or cannot be parsed.
+ * @throws {Error} On non-OK HTTP status codes or JSON parse failures.
+ *
+ * @internal
+ */
 async function callGeminiApi(input: EventInput, apiKey: string): Promise<EventPlan | null> {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+  const url = `${GEMINI_API_BASE}?key=${apiKey}`;
 
   const promptText = `Generate a master Event Blueprint with this specification:
 - Event Type: ${input.eventType}
+- Event Date: ${input.eventDate || 'Flexible / To Be Confirmed'}
 - Total Budget: ${input.currency} ${input.totalBudget}
 - Guest Count: ${input.guestCount}
 - Duration: ${input.durationHours} Hours
@@ -95,7 +150,7 @@ Output raw JSON adhering to the system prompt schema.`;
       },
     ],
     generationConfig: {
-      temperature: 0.4,
+      temperature: GEMINI_TEMPERATURE,
       responseMimeType: 'application/json',
     },
   };
@@ -121,6 +176,7 @@ Output raw JSON adhering to the system prompt schema.`;
     id: `plan-${Date.now()}`,
     createdAt: new Date().toISOString(),
     eventType: input.eventType,
+    eventDate: input.eventDate || undefined,
     guestCount: input.guestCount,
     durationHours: input.durationHours,
     locationType: input.locationType,
@@ -129,7 +185,22 @@ Output raw JSON adhering to the system prompt schema.`;
   };
 }
 
-function cleanJsonString(str: string): string {
+/**
+ * Strips markdown code-fence wrappers that some LLM responses prepend to JSON
+ * output despite being instructed to return raw JSON.
+ *
+ * Handles both `` ```json `` and bare `` ``` `` fence variants.
+ * Exported for unit testing — avoids logic duplication in test files.
+ *
+ * @param str - Raw string emitted by the LLM.
+ * @returns The input with leading/trailing code-fence markers removed.
+ *
+ * @example
+ * ```ts
+ * cleanJsonString('```json\n{"a":1}\n```') // → '{"a":1}'
+ * ```
+ */
+export function cleanJsonString(str: string): string {
   let cleaned = str.trim();
   if (cleaned.startsWith('```json')) {
     cleaned = cleaned.replace(/^```json\s*/, '').replace(/\s*```$/, '');
@@ -140,19 +211,31 @@ function cleanJsonString(str: string): string {
 }
 
 /**
- * Intelligent client-side generator to provide immediate responsiveness
- * without requiring evaluators to configure an API key.
+ * Deterministic client-side event plan synthesiser.
+ *
+ * Generates a mathematically coherent, operationally realistic
+ * {@link EventPlan} without making any network requests, ensuring the full
+ * platform is demonstrable without an API key.
+ *
+ * Budget allocation follows the 5-pillar distribution defined in
+ * `src/constants/index.ts`, and all numeric sums are validated to satisfy
+ * the coherence invariant enforced by {@link isBudgetCoherent}.
+ *
+ * @param input - Validated and sanitized event configuration.
+ * @returns A fully-populated {@link EventPlan} object.
+ *
+ * @internal
  */
 function synthesizeClientSidePlan(input: EventInput): EventPlan {
-  const { eventType, totalBudget, currency, guestCount, durationHours, locationType, specialRequirements } = input;
-  const contingency = Math.round(totalBudget * 0.12);
+  const { eventType, eventDate, totalBudget, currency, guestCount, durationHours, locationType, specialRequirements } = input;
+  const contingency = Math.round(Math.max(0, totalBudget) * DEFAULT_CONTINGENCY_FRACTION);
   const spendable = totalBudget - contingency;
 
-  // Mathematically balanced distribution
-  const venueAmt = Math.round(spendable * 0.35);
-  const foodAmt = Math.round(spendable * 0.30);
-  const decorAmt = Math.round(spendable * 0.15);
-  const entAmt = Math.round(spendable * 0.12);
+  // Mathematically balanced 5-pillar distribution (constants from src/constants/index.ts)
+  const venueAmt = Math.round(spendable * VENUE_SHARE);
+  const foodAmt = Math.round(spendable * FOOD_SHARE);
+  const decorAmt = Math.round(spendable * DECOR_SHARE);
+  const entAmt = Math.round(spendable * ENTERTAINMENT_SHARE);
   const logAmt = spendable - (venueAmt + foodAmt + decorAmt + entAmt);
 
   const categories = [
@@ -197,6 +280,7 @@ function synthesizeClientSidePlan(input: EventInput): EventPlan {
     id: `plan-synth-${Date.now()}`,
     createdAt: new Date().toISOString(),
     eventType,
+    eventDate: eventDate || undefined,
     guestCount,
     durationHours,
     locationType,

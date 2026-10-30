@@ -1,8 +1,28 @@
+/**
+ * @fileoverview Export utilities for AuraPlan AI.
+ *
+ * Provides three output channels for a synthesised {@link EventPlan}:
+ * - {@link generateICS} — RFC 5545 iCalendar serialisation for calendar apps.
+ * - {@link generateMarkdownSummary} — Human-readable executive dossier.
+ * - {@link downloadFile} — Browser download trigger with guaranteed Blob cleanup.
+ */
+
 import { EventPlan, TimelineItem } from '../types/event';
 import { formatCurrency } from './budgetCalculator';
+import { ICS_PRODID } from '../constants';
 
 /**
- * Generates an iCalendar (.ics) string from the event timeline.
+ * Serialises an {@link EventPlan}'s timeline into a valid RFC 5545 iCalendar
+ * (`.ics`) string, suitable for import into Google Calendar, Apple Calendar,
+ * Outlook, and any compliant calendar client.
+ *
+ * Each timeline activity becomes a `VEVENT` component with:
+ * - A stable `UID` scoped to the plan ID, item index, and event date.
+ * - Approximate `DTSTART`/`DTEND` derived from the human-readable time string.
+ * - An escaped `DESCRIPTION` containing the activity details and buffer minutes.
+ *
+ * @param plan - The fully-populated event plan to serialise.
+ * @returns A CRLF-delimited iCalendar string beginning with `BEGIN:VCALENDAR`.
  */
 export function generateICS(plan: EventPlan): string {
   const now = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
@@ -12,7 +32,7 @@ export function generateICS(plan: EventPlan): string {
   let icsContent = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//AuraPlan AI//Celebration Planner//EN',
+    `PRODID:${ICS_PRODID}`,
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
     `X-WR-CALNAME:${escapeICS(plan.eventSummary.title)}`,
@@ -55,26 +75,52 @@ export function generateICS(plan: EventPlan): string {
 }
 
 function escapeICS(str: string): string {
-  return str.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
+  // Strip carriage returns and newlines first to prevent CRLF injection (RFC 5545 §3.3.11)
+  const sanitized = str.replace(/[\r\n]+/g, ' ');
+  return sanitized
+    .replace(/\\/g, '\\\\')
+    .replace(/;/g, '\\;')
+    .replace(/,/g, '\\,');
 }
 
 /**
- * Triggers browser download of a file.
+ * Triggers a browser file download for the supplied content string.
+ *
+ * Uses `URL.createObjectURL` with a `try/finally` block to guarantee that
+ * the temporary Blob URL is always revoked, preventing memory leaks even if
+ * an exception occurs during link click simulation.
+ *
+ * @param content  - UTF-8 string content to write into the downloaded file.
+ * @param filename - Desired filename shown in the browser save dialog.
+ * @param mimeType - MIME type of the file (defaults to `'text/plain'`).
  */
-export function downloadFile(content: string, filename: string, mimeType: string = 'text/plain') {
+export function downloadFile(content: string, filename: string, mimeType: string = 'text/plain'): void {
   const blob = new Blob([content], { type: `${mimeType};charset=utf-8;` });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
-  link.setAttribute('href', url);
-  link.setAttribute('download', filename);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
+  try {
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(link);
+    link.click();
+  } finally {
+    if (document.body.contains(link)) {
+      document.body.removeChild(link);
+    }
+    URL.revokeObjectURL(url);
+  }
 }
 
 /**
- * Generates clean executive markdown summary of the entire event plan.
+ * Generates a Markdown executive dossier summarising the complete event plan.
+ *
+ * The output is formatted for readability in GitHub, Notion, Obsidian, and any
+ * Markdown viewer. Sections include: event summary, budget breakdown table,
+ * timeline, vendor checklist, and the risk & contingency matrix.
+ *
+ * @param plan - The fully-populated event plan to summarise.
+ * @returns A Markdown string ready for download or clipboard copy.
  */
 export function generateMarkdownSummary(plan: EventPlan): string {
   const { eventSummary, budgetAllocation, timelineItinerary, vendorChecklist, riskContingencyMatrix } = plan;

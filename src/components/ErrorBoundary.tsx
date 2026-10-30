@@ -1,3 +1,15 @@
+/**
+ * @fileoverview ErrorBoundary — Enterprise React Error Boundary for AuraPlan AI.
+ *
+ * Catches unhandled runtime rendering exceptions from any child component and
+ * replaces the broken subtree with a recoverable failover UI, preventing a
+ * total application crash. Provides one-click "Re-initialize Orchestrator"
+ * recovery via a full page reload.
+ *
+ * Implemented as a React class component because the `componentDidCatch`
+ * lifecycle method is not yet available as a hook in React 19.
+ */
+
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 
