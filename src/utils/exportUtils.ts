@@ -130,7 +130,9 @@ export function generateMarkdownSummary(plan: EventPlan): string {
 
 > **Theme Concept:** ${eventSummary.themeConcept}  
 > **Dress Code:** ${eventSummary.dressCode}  
-> **Guests:** ${plan.guestCount} | **Duration:** ${plan.durationHours} Hours | **Setting:** ${plan.locationType}
+> **Date:** ${plan.eventDate || 'Flexible / TBD'}  
+> **Guests:** ${plan.guestCount} | **Duration:** ${plan.durationHours} Hours | **Setting:** ${plan.locationType}  
+> **Special Constraints:** ${plan.specialRequirements || 'None specified'}
 
 ---
 

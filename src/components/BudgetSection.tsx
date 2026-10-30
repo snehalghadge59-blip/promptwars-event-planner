@@ -111,7 +111,7 @@ export const BudgetSection: React.FC<BudgetSectionProps> = ({ budget, onUpdateCa
 
       {/* Categories Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
-        {categories.map((cat, idx) => {
+        {categories.map((cat) => {
           const spent = cat.actualSpent || 0;
           const pctSpent = cat.allocated > 0 ? Math.min(100, Math.round((spent / cat.allocated) * 100)) : 0;
           const isOver = spent > cat.allocated;

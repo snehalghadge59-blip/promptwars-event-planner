@@ -19,3 +19,4 @@ export { Navbar } from './Navbar';
 export { RiskSentinelSection } from './RiskSentinelSection';
 export { TimelineSection } from './TimelineSection';
 export { VendorSection } from './VendorSection';
+export { GuestTrackerSection } from './GuestTrackerSection';

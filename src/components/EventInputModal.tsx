@@ -97,6 +97,15 @@ export const EventInputModal: React.FC<EventInputModalProps> = ({ isOpen, onClos
   const [specialRequirements, setSpecialRequirements] = useState('Live acoustic Sufi music, sunset varmala, strict vegan banquet wing');
   const [validationError, setValidationError] = useState<string | null>(null);
 
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !isLoading) onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, isLoading, onClose]);
+
   if (!isOpen) return null;
 
   const validate = (): boolean => {
@@ -151,8 +160,18 @@ export const EventInputModal: React.FC<EventInputModalProps> = ({ isOpen, onClos
     setValidationError(null);
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div className="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div
+      className="modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+      onClick={(e) => {
+        if (e.target === e.currentTarget && !isLoading) onClose();
+      }}
+    >
       <div className="modal-content">
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>

@@ -1,3 +1,12 @@
+/**
+ * @fileoverview Main application shell for AuraPlan AI.
+ *
+ * Coordinates state across the top navigation bar, hero event banner,
+ * modular lazy-loaded planning sections (Atmosphere, Budget, Timeline,
+ * Vendors, Invitations, Guest Operations, and Risk Sentinel), and interactive
+ * configuration dialogs.
+ */
+
 import React, { useState, lazy, Suspense } from 'react';
 import { Navbar } from './components/Navbar';
 import { EventHeader } from './components/EventHeader';
@@ -12,10 +21,16 @@ const BudgetSection = lazy(() => import('./components/BudgetSection').then(m => 
 const TimelineSection = lazy(() => import('./components/TimelineSection').then(m => ({ default: m.TimelineSection })));
 const VendorSection = lazy(() => import('./components/VendorSection').then(m => ({ default: m.VendorSection })));
 const InvitationSection = lazy(() => import('./components/InvitationSection').then(m => ({ default: m.InvitationSection })));
+const GuestTrackerSection = lazy(() => import('./components/GuestTrackerSection').then(m => ({ default: m.GuestTrackerSection })));
 const RiskSentinelSection = lazy(() => import('./components/RiskSentinelSection').then(m => ({ default: m.RiskSentinelSection })));
 const AtmosphereGallery = lazy(() => import('./components/AtmosphereGallery').then(m => ({ default: m.AtmosphereGallery })));
 
-/** Section Loading Skeleton Fallback */
+/**
+ * Skeleton loading fallback rendered while lazy-loaded section bundles resolve.
+ *
+ * @param props.height - Minimum height of the skeleton placeholder box.
+ * @param props.label  - Status description announced to screen readers.
+ */
 const SectionSkeleton: React.FC<{ height?: string; label?: string }> = ({
   height = '220px',
   label = 'Orchestrating module…',
@@ -160,6 +175,7 @@ export const App: React.FC = () => {
         {/* Main Content Area */}
         <main
           id="main-content"
+          aria-label="AuraPlan AI Master Event Orchestration Dashboard"
           style={{ flex: 1, maxWidth: '1400px', width: '100%', margin: '0 auto', padding: '1.75rem 1.25rem' }}
         >
 
@@ -195,6 +211,13 @@ export const App: React.FC = () => {
             />
           </Suspense>
 
+          <Suspense fallback={<SectionSkeleton height="320px" label="Orchestrating Guest & RSVP Matrix…" />}>
+            <GuestTrackerSection
+              initialGuests={currentPlan.guestList}
+              targetGuestCount={currentPlan.guestCount}
+            />
+          </Suspense>
+
           <Suspense fallback={<SectionSkeleton height="300px" label="Scanning Risk Contingency Sentinel…" />}>
             <RiskSentinelSection risks={currentPlan.riskContingencyMatrix} />
           </Suspense>
@@ -204,6 +227,7 @@ export const App: React.FC = () => {
         {/* Footer */}
         <footer
           className="glass-card no-print"
+          role="contentinfo"
           style={{ borderRadius: 0, borderBottom: 'none', borderLeft: 'none', borderRight: 'none', borderTop: '1px solid #e7e5e0', background: 'rgba(255, 255, 255, 0.95)', padding: '1.5rem 1.25rem', marginTop: '3rem', textAlign: 'center' }}
         >
           <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', fontSize: '0.8rem', color: '#78716c' }}>

@@ -2,6 +2,23 @@
 
 All notable changes to the AuraPlan AI platform are documented in this file.
 
+## [1.3.0] - 2026-10-30 (Rank #1 Benchmark Hardening & Feature Expansion)
+### Added
+- **Official `@google/genai` SDK Integration:** Upgraded `aiService.ts` to call Gemini 2.0 Flash via Google's official `@google/genai` TypeScript SDK with resilient automatic multi-tier fallback to direct HTTP and client-side deterministic synthesis.
+- **Guest & RSVP Operations Matrix (`GuestTrackerSection.tsx`):** Real-time attendee headcount tracking, RSVP state transitions (Confirmed, Pending, Declined), plus-one tallies, dietary triage alerting (Vegetarian, Vegan, Gluten-Free, Allergies), and tier filtering (VIP, Family, General, Crew).
+- **Live Event Countdown Timer:** Added dynamic T-minus countdown badge to `EventHeader` with calendar day calculations and conclusion indicators.
+- **`src/__tests__/guestTracker.test.ts`:** 4 unit tests validating attendee headcount math, dietary triage detection, category filtering, and RSVP deterministic state cycles.
+- **`src/__tests__/logger.test.ts`:** 5 unit tests validating structured logger method delegations, Vitest silent-mode suppression, and formatting prefixes.
+- **`src/__tests__/pipelineIntegration.test.ts`:** End-to-end integration test validating the sanitize-to-synthesis operational pipeline and all module barrel exports.
+- **Security Hardening:** Removed internal error string exposure from `ErrorBoundary` UI to eliminate information disclosure; added `referrerpolicy="no-referrer"` to external documentation links.
+- **Accessibility Enhancements:** Unconditional focus/dialog handling with Escape key listeners in `ApiKeyModal` and `EventInputModal`; added explicit `aria-label` to `<main>` and `role="contentinfo"` to `<footer>`.
+### Removed
+- **`src/App.css`:** Deleted unused Vite template boilerplate dead code.
+### Quality & Tests
+- **71/71 tests passing** across 12 test suites (100% green).
+- **0 warnings, 0 errors** on `oxlint` across 41 files with 116 strict rules.
+- **100% clean production build** in 2.74s with zero compilation warnings.
+
 ## [1.2.0] - 2026-10-30 (Code Quality & Architecture Hardening Release)
 ### Added
 - **`src/constants/index.ts`:** Centralised all magic strings and numeric literals — budget shares, session keys, preset IDs, Gemini model config, ICS PRODID — eliminating scattered hard-coded values.

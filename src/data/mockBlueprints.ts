@@ -1,5 +1,24 @@
+/**
+ * @fileoverview Pre-computed evaluator demo blueprints for AuraPlan AI.
+ *
+ * Provides three richly-detailed, mathematically coherent event plans
+ * that allow evaluators and judges to explore the full platform capability
+ * without configuring a Gemini API key:
+ *
+ * - `royal-wedding`      — The Grand Jaipur Heritage Royal Wedding (350 guests, ₹35L)
+ * - `ai-hackathon`       — Nexus26: 36-Hour Autonomous Agent Hackathon (250 hackers, ₹18L)
+ * - `milestone-birthday` — Elysium Noir: 30th Rooftop Soirée (60 guests, ₹4.5L)
+ *
+ * All budgets satisfy the `isBudgetCoherent` invariant (category sum +
+ * contingency ≈ total within 0.1% tolerance).
+ */
+
 import { EventPlan } from '../types/event';
 
+/**
+ * Record of all pre-computed evaluator blueprints, keyed by preset identifier.
+ * Matches the preset constants defined in `src/constants/index.ts`.
+ */
 export const MOCK_BLUEPRINTS: Record<string, EventPlan> = {
   'royal-wedding': {
     id: 'plan-wedding-01',

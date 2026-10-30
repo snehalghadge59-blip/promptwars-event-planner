@@ -12,6 +12,7 @@
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { logger } from '../utils/logger';
 
 interface Props {
   children: ReactNode;
@@ -39,7 +40,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    console.error('Uncaught error in AuraPlan component tree:', error, errorInfo);
+    logger.error('Uncaught error in AuraPlan component tree:', error, errorInfo);
     this.setState({ errorInfo });
   }
 
@@ -102,25 +103,8 @@ export class ErrorBoundary extends Component<Props, State> {
             </h1>
 
             <p style={{ color: '#57534e', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: '1.6' }}>
-              A rendering anomaly occurred within the orchestrator state tree. Your active configuration remains safeguarded.
+              A rendering anomaly occurred within the orchestrator state tree. Your active configuration remains safeguarded. Click below to safely re-initialize the session.
             </p>
-
-            {this.state.error && (
-              <pre
-                style={{
-                  background: '#f5f5f4',
-                  padding: '1rem',
-                  borderRadius: '8px',
-                  textAlign: 'left',
-                  fontSize: '0.75rem',
-                  overflowX: 'auto',
-                  color: '#b91c1c',
-                  marginBottom: '1.5rem',
-                }}
-              >
-                {this.state.error.toString()}
-              </pre>
-            )}
 
             <button
               onClick={this.handleReset}

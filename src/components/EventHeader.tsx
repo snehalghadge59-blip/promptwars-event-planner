@@ -7,7 +7,7 @@
  */
 
 import React, { useState } from 'react';
-import { Users, Clock, MapPin, Sparkles, Shirt, Check } from 'lucide-react';
+import { Users, Clock, MapPin, Sparkles, Shirt, Check, CalendarClock } from 'lucide-react';
 import { EventPlan } from '../types/event';
 
 /**
@@ -19,15 +19,34 @@ interface EventHeaderProps {
 }
 
 /**
+ * Computes calendar day difference between event date and today.
+ *
+ * @param dateStr - ISO date string in YYYY-MM-DD format.
+ * @returns Days remaining and past flag, or null if date is not specified.
+ */
+function computeCountdown(dateStr?: string): { days: number; isPast: boolean } | null {
+  if (!dateStr) return null;
+  const target = new Date(dateStr).getTime();
+  if (isNaN(target)) return null;
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  const diffMs = target - now.getTime();
+  const days = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+  return { days, isPast: days < 0 };
+}
+
+/**
  * Hero banner component displaying the event identity: title, tagline,
  * theme concept, key metrics (guest count, duration, venue, dress code),
- * colour palette swatches with clipboard copy, and venue atmosphere thumbnail.
+ * colour palette swatches with clipboard copy, countdown timer, and venue atmosphere thumbnail.
  *
  * @param plan - The active event plan to render.
  */
 export const EventHeader: React.FC<EventHeaderProps> = ({ plan }) => {
   const { eventSummary, guestCount, durationHours, locationType } = plan;
   const [copiedHex, setCopiedHex] = useState<string | null>(null);
+
+  const countdown = computeCountdown(plan.eventDate);
 
   const handleCopyHex = (hex: string) => {
     navigator.clipboard.writeText(hex);
@@ -86,13 +105,27 @@ export const EventHeader: React.FC<EventHeaderProps> = ({ plan }) => {
       >
         {/* Main Title & Tagline */}
         <div style={{ flex: '1 1 500px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.4rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.4rem', flexWrap: 'wrap' }}>
             <span className="badge badge-amber">
               <Sparkles size={12} /> {plan.eventType}
             </span>
             {plan.eventDate && (
               <span className="badge badge-indigo">
                 Target: {plan.eventDate}
+              </span>
+            )}
+            {countdown && (
+              <span
+                className={`badge ${countdown.isPast ? 'badge-amber' : 'badge-emerald'}`}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
+                title={countdown.isPast ? 'Event date has passed' : `${countdown.days} days remaining until event day`}
+              >
+                <CalendarClock size={12} />
+                {countdown.days === 0
+                  ? 'Event is Today!'
+                  : countdown.isPast
+                  ? `Concluded ${Math.abs(countdown.days)}d ago`
+                  : `T-minus ${countdown.days} Days`}
               </span>
             )}
             <span className="badge badge-emerald">

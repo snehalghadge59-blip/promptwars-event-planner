@@ -10,6 +10,7 @@
  * also exported for independent unit testing.
  */
 
+import { GoogleGenAI } from '@google/genai';
 import { EventInput, EventPlan } from '../types/event';
 import { logger } from '../utils/logger';
 import {
@@ -114,8 +115,8 @@ export async function generateEventPlan(input: EventInput, apiKey?: string): Pro
 
 
 /**
- * Performs a live call to the Gemini 2.0 Flash API and parses the structured
- * JSON response into an {@link EventPlan}.
+ * Performs a live call to the Gemini 2.0 Flash API using the official
+ * `@google/genai` SDK and parses the structured JSON response into an {@link EventPlan}.
  *
  * @param input  - Sanitized event configuration.
  * @param apiKey - Validated Gemini API key (trimmed, non-empty).
@@ -126,8 +127,6 @@ export async function generateEventPlan(input: EventInput, apiKey?: string): Pro
  * @internal
  */
 async function callGeminiApi(input: EventInput, apiKey: string): Promise<EventPlan | null> {
-  const url = `${GEMINI_API_BASE}?key=${apiKey}`;
-
   const promptText = `Generate a master Event Blueprint with this specification:
 - Event Type: ${input.eventType}
 - Event Date: ${input.eventDate || 'Flexible / To Be Confirmed'}
@@ -137,52 +136,85 @@ async function callGeminiApi(input: EventInput, apiKey: string): Promise<EventPl
 - Location & Setting: ${input.locationType}
 - Special Constraints: ${input.specialRequirements || 'None specified'}
 
-Output raw JSON adhering to the system prompt schema.`;
+Output raw JSON adhering strictly to the system prompt schema.`;
 
-  const body = {
-    contents: [
-      {
-        role: 'user',
-        parts: [
-          { text: SYSTEM_PROMPT },
-          { text: promptText },
-        ],
+  try {
+    const ai = new GoogleGenAI({ apiKey });
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.0-flash',
+      contents: promptText,
+      config: {
+        systemInstruction: SYSTEM_PROMPT,
+        temperature: GEMINI_TEMPERATURE,
+        responseMimeType: 'application/json',
       },
-    ],
-    generationConfig: {
-      temperature: GEMINI_TEMPERATURE,
-      responseMimeType: 'application/json',
-    },
-  };
+    });
 
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
+    const rawText = response.text;
+    if (!rawText) throw new Error('Empty response from Google GenAI SDK');
 
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(`Gemini API error (${res.status}): ${errorText}`);
+    const parsed = JSON.parse(cleanJsonString(rawText));
+
+    return {
+      id: `plan-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      eventType: input.eventType,
+      eventDate: input.eventDate || undefined,
+      guestCount: input.guestCount,
+      durationHours: input.durationHours,
+      locationType: input.locationType,
+      specialRequirements: input.specialRequirements,
+      ...parsed,
+    };
+  } catch (sdkErr) {
+    logger.warn('Google GenAI SDK direct execution failed, attempting fallback direct HTTP request:', sdkErr);
+
+    const url = `${GEMINI_API_BASE}?key=${apiKey}`;
+    const body = {
+      contents: [
+        {
+          role: 'user',
+          parts: [
+            { text: SYSTEM_PROMPT },
+            { text: promptText },
+          ],
+        },
+      ],
+      generationConfig: {
+        temperature: GEMINI_TEMPERATURE,
+        responseMimeType: 'application/json',
+      },
+    };
+
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Gemini API error (${res.status}): ${errorText}`);
+    }
+
+    const data = await res.json();
+    const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!rawText) throw new Error('Empty response from Gemini API');
+
+    const parsed = JSON.parse(cleanJsonString(rawText));
+
+    return {
+      id: `plan-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      eventType: input.eventType,
+      eventDate: input.eventDate || undefined,
+      guestCount: input.guestCount,
+      durationHours: input.durationHours,
+      locationType: input.locationType,
+      specialRequirements: input.specialRequirements,
+      ...parsed,
+    };
   }
-
-  const data = await res.json();
-  const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!rawText) throw new Error('Empty response from Gemini API');
-
-  const parsed = JSON.parse(cleanJsonString(rawText));
-
-  return {
-    id: `plan-${Date.now()}`,
-    createdAt: new Date().toISOString(),
-    eventType: input.eventType,
-    eventDate: input.eventDate || undefined,
-    guestCount: input.guestCount,
-    durationHours: input.durationHours,
-    locationType: input.locationType,
-    specialRequirements: input.specialRequirements,
-    ...parsed,
-  };
 }
 
 /**

@@ -18,4 +18,5 @@ export type {
   EventSummary,
   EventPlan,
   EventInput,
+  GuestItem,
 } from './event';
