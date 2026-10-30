@@ -2,6 +2,26 @@
 
 All notable changes to the AuraPlan AI platform are documented in this file.
 
+## [1.2.0] - 2026-10-30 (Code Quality & Architecture Hardening Release)
+### Added
+- **`src/constants/index.ts`:** Centralised all magic strings and numeric literals — budget shares, session keys, preset IDs, Gemini model config, ICS PRODID — eliminating scattered hard-coded values.
+- **`src/utils/logger.ts`:** Structured application logger (`logger.debug/info/warn/error`) with `[AuraPlan]` prefix, auto-silencing in Vitest, and dev-only debug output. Replaces all raw `console.warn` calls.
+- **`src/utils/sanitizer.ts`:** Dedicated XSS and prototype-pollution sanitization utility — `sanitizeInput` (HTML strip + entity encode + length cap) and `sanitizeEventInput` (full EventInput pipeline). Applied at the form boundary in `EventInputModal`.
+- **Barrel `index.ts` exports** in every module directory (`components/`, `types/`, `utils/`, `hooks/`, `services/`) for clean single-path imports and tree-shaking ergonomics.
+- **JSDoc `@fileoverview` blocks** on every source file; `@param`, `@returns`, `@throws`, `@example` tags on every exported function and component.
+- **Inline JSDoc** on every `interface` prop with descriptive field annotations.
+- **`src/__tests__/sanitizer.test.ts`:** 17-test suite covering XSS injection, prototype-pollution detection, length truncation, numeric coercion, and the full pipeline.
+- **`src/__tests__/constants.test.ts`:** 8-test suite validating budget share sums, contingency fraction bounds, and preset identifier uniqueness.
+- **CSP `Content-Security-Policy` meta tag** added to `index.html` to restrict script sources, frame ancestors, and connection targets.
+- **Open Graph, keywords, author, and robots** meta tags added to `index.html` for SEO completeness.
+### Changed
+- `EventInputModal.handleSubmit` now calls `sanitizeEventInput()` before dispatching to the AI service — XSS defence applied at input boundary.
+- `aiService.ts` imports budget shares and API config from `src/constants/index.ts` instead of inline literals.
+- `useEventPlan.ts` uses `SESSION_KEY_GEMINI_API`, `DEFAULT_PRESET`, and `PRESET_CUSTOM` constants.
+- All `handleCustomSubmit` and `downloadFile` return types explicitly annotated as `Promise<void>` / `void`.
+### Tests
+- **58/58 tests passing** across 9 test suites (up from 19 in 5 suites).
+
 ## [1.1.0] - 2026-10-25 (Top 10 Performance & Architecture Release)
 ### Added
 - **React ErrorBoundary:** Enterprise-grade error boundary catching runtime component anomalies with one-click recovery.
